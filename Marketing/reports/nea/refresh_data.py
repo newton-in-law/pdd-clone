@@ -11,4 +11,5 @@ safe('neows', R.step_neows)
 recent = safe('mpec', R.step_mpec) or []
 sky = safe('sky', R.step_sky, recent) or {}
 sent = safe('sentry', R.step_sentry) or []
-safe('watch', R.step_watch, sky, {r['des'] for r in sent})
+if sky: safe('watch', R.step_watch, sky, {r['des'] for r in sent})
+else: print('watch: no sky positions this run (MPC or Horizons unreachable), previous map points kept', flush=True)
