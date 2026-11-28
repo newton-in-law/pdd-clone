@@ -16,7 +16,7 @@ from xml.sax.saxutils import escape
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOG_JSON = os.path.join(HERE, 'nea_log.json')
 LOG_XLSX = os.path.join(HERE, 'nea_log.xlsx')
-NEOWS_KEY = os.environ.get('NASA_API_KEY', 'DEMO_KEY')
+NEOWS_KEY = os.environ.get('NASA_API_KEY') or 'DEMO_KEY'
 LD_KM = 384400.0
 COLUMNS = ['key', 'neo_id', 'name', 'designation', 'approach_utc', 'approach_date', 'miss_km', 'miss_ld',
            'rel_velocity_kms', 'H_mag', 'diam_min_m', 'diam_max_m', 'pha', 'sentry',
