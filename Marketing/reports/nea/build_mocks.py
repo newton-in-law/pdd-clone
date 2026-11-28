@@ -123,7 +123,8 @@ _, _, lead = grab(h0, 'class="lead"')
 us, ue, under = grab(h0, 'class="under under-rows"')
 _, _, castband = grab(h0, '<section class="castband"')
 _, _, pladd = grab(h0, 'class="pl-ad"'); pladd = side_images(pladd)
-_, _, plrail = grab(h0, 'class="pl-rail"')
+try: _, _, plrail = grab(h0, 'class="pl-rail"')
+except ValueError: plrail = ''; print('WARNING: the live paper has no pl-rail element now; building without the paper rail', flush=True)
 fs, fe, foot = grab(h0, '<footer class="pfoot"', back=False)
 lead_id = re.search(r'/story/([0-9a-f]{32})', lead).group(1)
 # the second article: the most recent story that is not the lead
@@ -457,7 +458,8 @@ live = urllib.request.urlopen(urllib.request.Request(LIVE + '/?lang=en', headers
 cb = re.search(r'<section class="castband".*?</section>', live, flags=re.S).group(0)
 cast_mp4 = re.search(r'data-cb="([^"]+)"', cb).group(1); cast_poster = re.search(r'<img src="([^"]+)"', cb).group(1)
 cast_ep = re.search(r'Episode</span>\s*(\d+)\s*&middot;\s*([\d:]+)', cb); ep_n, ep_t = cast_ep.group(1), cast_ep.group(2)
-cast_day = re.search(r'The (\d{4}-\d{2}-\d{2}) edition', cb).group(1)
+_cd = re.search(r'The (\d{4}-\d{2}-\d{2}) edition', cb) or re.search(r'the-day-(\d{4}-\d{2}-\d{2})', cb) or re.search(r'(\d{4}-\d{2}-\d{2})', cb)
+cast_day = _cd.group(1) if _cd else datetime.date.today().isoformat()
 YT_URL = 'https://www.youtube.com/@PlanetaryDefenseDaily'
 YT_SVG = re.search(r'<svg.*?</svg>', YI, flags=re.S).group(0)
 POPSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M10 21H3v-7M21 3l-8 8M3 21l8-8"/></svg>'
